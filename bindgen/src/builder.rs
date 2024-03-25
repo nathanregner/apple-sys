@@ -1,5 +1,5 @@
 pub use crate::{
-    config::{Config, ConfigMap, FileConfig},
+    config::{Config, ConfigMap},
     sdk::{SdkPath, SdkPathError},
 };
 
@@ -44,7 +44,7 @@ impl Builder {
 
     pub fn bindgen_builder(&self) -> bindgen::Builder {
         // Begin building the bindgen params.
-        let mut builder = bindgen::Builder::default();
+        let mut builder = bindgen::Builder::default().detect_include_paths(false);
 
         let mut clang_args = vec!["-x", "objective-c", "-fblocks", "-fmodules"];
         let target_arg;
