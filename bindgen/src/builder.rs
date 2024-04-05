@@ -6,7 +6,6 @@ pub use crate::{
 #[derive(Debug)]
 pub struct Builder {
     framework: String,
-    sdk: SdkPath,
     target: Option<String>,
     config: Config,
 }
@@ -14,12 +13,11 @@ pub struct Builder {
 impl Builder {
     pub fn new(
         framework: &str,
-        sdk: impl TryInto<SdkPath, Error = SdkPathError>,
+        _sdk: impl TryInto<SdkPath, Error = SdkPathError>,
         config: Config,
     ) -> Result<Self, SdkPathError> {
         Ok(Self {
             framework: framework.to_owned(),
-            sdk: sdk.try_into()?,
             target: None,
             config,
         })
@@ -52,14 +50,6 @@ impl Builder {
             target_arg = format!("--target={}", target);
             clang_args.push(&target_arg);
         }
-
-        clang_args.extend(&[
-            "-isysroot",
-            self.sdk
-                .path()
-                .to_str()
-                .expect("sdk path is not utf-8 representable"),
-        ]);
 
         builder = builder
             .clang_args(&clang_args)
